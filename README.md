@@ -49,6 +49,30 @@ then add the `ZoomSlider` product to your target and `import ZoomSlider`.
 pod 'ZoomSlider', '~> 1.0'
 ```
 
+### Decimal measurements
+
+Bind a `Double` for values such as weight, distance, or temperature:
+
+```swift
+@State private var weight = 1.98
+
+ZoomSlider(value: $weight, bounds: 0.01...10.0, step: 0.01, unit: "kg")
+```
+
+The decimal initializer requires explicit `bounds` and `step`. Existing integer
+calls remain unchanged. Both label closures receive the measurement as a `Double`;
+default decimal labels use locale-aware number formatting (up to 16 fractional digits).
+All styling, haptics, accessibility, and editing callbacks remain available.
+
+Steps start at the lower bound. As with integer ranges, an upper bound that is not
+a full step is omitted (`0...1` by `0.3` ends at `0.9`). Bounds must be finite,
+`step` must be finite and positive, and both must be representable by Foundation
+`Decimal`. The number of steps must fit an `Int` with room for the final tick.
+The renderer draws one tick per step, so choose practical ranges and increments.
+
+`ZoomSlider.progress(of:bounds:step:)` also accepts decimal values. Merely creating
+the slider does not rewrite an off-step binding; user interaction snaps to a tick.
+
 ### Requirements
 
 | Platform | Minimum |
